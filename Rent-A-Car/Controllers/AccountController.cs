@@ -136,10 +136,11 @@ namespace Rent_A_Car.Controllers
 
 				if (userToEdit != null)
 				{
-					var result = await userManager.RemovePasswordAsync(userToEdit);
+                    userToEdit.Password = model.NewPassword;
+                    var result = await userManager.RemovePasswordAsync(userToEdit);
 					if (result.Succeeded)
 					{
-						result = await userManager.AddPasswordAsync(userToEdit, model.NewPassword);
+                        result = await userManager.AddPasswordAsync(userToEdit, model.NewPassword);
 						return RedirectToAction("Login", "Account");
 					}
 					else

@@ -89,10 +89,12 @@ namespace Rent_A_Car.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,CarId,StartDate,EndDate,Id")] Request request)
+		public async Task<IActionResult> Create([Bind("Id,CarId,StartDate,EndDate,UserId")] Request request)
 		{
 			var existingRequest = await _context.Request.FirstOrDefaultAsync(r => r.CarId == request.CarId);
-			if (existingRequest == null)
+            request.User = await _userManager.FindByIdAsync(request.UserId);
+			request.Car = await _context.Car.FirstOrDefaultAsync(x => x.Id == request.CarId);
+            if (existingRequest == null)
 			{
 				_context.Request.Add(request);
 				await _context.SaveChangesAsync();
@@ -105,9 +107,6 @@ namespace Rent_A_Car.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
-		//ViewData["CarId"] = new SelectList(_context.Car, "Id", "Model", "Brand", "Brand");
-		//ViewData["UserId"] = new SelectList(_context.Users, "Id", "EGN", "FirstName", "FirstName");
-		//return View();
 
 		// GET: Request/Edit/5
 		public async Task<IActionResult> Edit(int? id)
