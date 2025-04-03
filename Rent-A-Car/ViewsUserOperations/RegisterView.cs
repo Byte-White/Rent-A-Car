@@ -29,6 +29,7 @@ namespace Rent_A_Car.ViewsUserOperations
 		public string LastName { get; set; }
 
 		[Required(ErrorMessage = "EGN is required")]
+        [StringLength(10, ErrorMessage = "EGN must be exactly 10 digits long.", MinimumLength = 10)]
 		public string EGN { get; set; }
 
 		[Required(ErrorMessage = "Phone number is required")]

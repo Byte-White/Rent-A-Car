@@ -26,18 +26,22 @@ namespace Rent_A_Car.Controllers
 			var userId = _userManager.GetUserId(User);
 			var userRequests = new List<Request>();
 
-			if (!User.IsInRole("Admin"))
-			{
-				userRequests = await _context.Request
-							.Where(r => r.UserId == userId)
-							.ToListAsync();
+			if (User.IsInRole("Admin"))
+            {
+                userRequests = await _context.Request
+							.Include(r => r.Car)
+							.Include(r => r.User)
+                            .ToListAsync();
 			}
-			else if (User.IsInRole("Admin"))
-			{
-				userRequests = await _context.Request
-							.ToListAsync();
-			}
-			return View(userRequests);
+			else
+            {
+                userRequests = await _context.Request
+                            .Where(r => r.UserId == userId)
+                            .Include(r => r.Car)
+                            .Include(r => r.User)
+                            .ToListAsync();
+            }
+            return View(userRequests);
 		}
 		// GET: Request/Details/5
 		public async Task<IActionResult> Details(int? id)

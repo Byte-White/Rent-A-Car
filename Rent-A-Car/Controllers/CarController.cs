@@ -57,7 +57,7 @@ namespace Rent_A_Car.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Brand,Model,YearOfProduction,Seats,Description,PricePerDay")] Car car)
+        public async Task<IActionResult> Create([Bind("Id,Brand,Model,YearOfProduction,Seats,PricePerDay,Description")] Car car)
         {
             if (ModelState.IsValid)
             {
