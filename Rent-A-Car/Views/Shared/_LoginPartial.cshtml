@@ -4,6 +4,7 @@
 <ul class="navbar-nav ms-auto">
 	@if (SignInManager.IsSignedIn(User))
 	{
+		<h6>@User.Identity.Name</h6>
 		<li>
 			<a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
 		</li>

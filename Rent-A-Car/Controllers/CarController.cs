@@ -11,7 +11,9 @@ using Rent_A_Car.Models;
 
 namespace Rent_A_Car.Controllers
 {
-	public class CarController : Controller
+
+    [Authorize(Roles = "Admin")]
+    public class CarController : Controller
     {
         private readonly AppDbContext _context;
 

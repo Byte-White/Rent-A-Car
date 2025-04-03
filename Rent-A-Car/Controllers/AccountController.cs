@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Rent_A_Car.Models;
 using Rent_A_Car.ViewsUserOperations;
 
@@ -16,7 +18,14 @@ namespace Rent_A_Car.Controllers
 			this.signInManager = signInManager;
 			this.userManager = userManager;
 		}
-		public IActionResult Login()
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> AllUsers()
+        {
+            return View(await userManager.Users.ToListAsync());
+        }
+
+        public IActionResult Login()
 		{
 			return View();
 		}
