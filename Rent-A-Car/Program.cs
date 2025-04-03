@@ -79,7 +79,6 @@ namespace Rent_A_Car
                     var user = new User();
                     user.UserName = email;
                     user.Email = email;
-                    user.Password = "Pass@1";
                     user.EGN = "1234567890";
                     user.PhoneNumber = "1234567890";
                     user.FirstName = "Admin";
