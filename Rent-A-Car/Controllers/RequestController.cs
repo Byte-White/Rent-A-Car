@@ -91,20 +91,17 @@ namespace Rent_A_Car.Controllers
 		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,CarId,StartDate,EndDate,UserId")] Request request)
 		{
-			var existingRequest = await _context.Request.FirstOrDefaultAsync(r => r.CarId == request.CarId);
             request.User = await _userManager.FindByIdAsync(request.UserId);
 			request.Car = await _context.Car.FirstOrDefaultAsync(x => x.Id == request.CarId);
-            if (existingRequest == null)
-			{
-				_context.Request.Add(request);
-				await _context.SaveChangesAsync();
-				return RedirectToAction(nameof(Index));
-			}
-			else
-			{
-				ModelState.AddModelError(string.Empty, "A request for this car already exists.");
-			}
 
+            if (!IsCarAvailable(request.CarId, request.StartDate, request.EndDate))
+            {
+                ModelState.AddModelError("", "The selected car is not available for the chosen dates.");
+                return View(request);
+            }
+
+			_context.Request.Add(request);
+			await _context.SaveChangesAsync();
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -142,7 +139,12 @@ namespace Rent_A_Car.Controllers
 				return NotFound();
 			}
 
-			try
+            if (!IsCarAvailable(request.CarId, request.StartDate, request.EndDate))
+            {
+                ModelState.AddModelError("", "The selected car is not available for the chosen dates.");
+            }
+
+            try
 			{
 				_context.Update(request);
 				await _context.SaveChangesAsync();
@@ -200,5 +202,13 @@ namespace Rent_A_Car.Controllers
 		{
 			return _context.Request.Any(e => e.Id == id);
 		}
-	}
+
+        public bool IsCarAvailable(int carId, DateTime startDate, DateTime endDate, int? requestId = null)
+        {
+            return !_context.Request
+                .Where(r => r.CarId == carId && r.Id != requestId)
+                .Any(r => startDate < r.EndDate && endDate > r.StartDate);
+        }
+
+    }
 }
