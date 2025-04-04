@@ -1,14 +1,16 @@
 ﻿@model IEnumerable<Rent_A_Car.Models.Car>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Cars";
 }
 
-<h1>Index</h1>
 
+@if (@User.IsInRole("Admin"))
+{
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+}
 <table class="table">
     <thead>
         <tr>
@@ -19,7 +21,7 @@
                 @Html.DisplayNameFor(model => model.Model)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.YearOfProduction)
+                Year Of Production
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Seats)
@@ -28,7 +30,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PricePerDay)
+                Price Per Day
             </th>
             <th></th>
         </tr>
@@ -52,12 +54,18 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PricePerDay)
+                    @String.Format("{0:F2}", item.PricePerDay) $
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <td>
+                @if (@User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> 
+                }
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                @if (@User.IsInRole("Admin"))
+                {
+                   <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }

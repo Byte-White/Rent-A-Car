@@ -63,8 +63,8 @@ namespace Rent_A_Car.Controllers
 			return View(request);
 		}
 
-		// GET: Request/Create
-		public IActionResult Create()
+        // GET: Request/Create
+        public IActionResult Create()
 		{
 			var loggedUser = _userManager.GetUserId(User);
 			var currentLoggedUsers = new List<User>();
@@ -89,7 +89,7 @@ namespace Rent_A_Car.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create([Bind("Id,CarId,StartDate,EndDate,UserId")] Request request)
+        public async Task<IActionResult> Create([Bind("Id,CarId,StartDate,EndDate,UserId")] Request request)
 		{
 			var existingRequest = await _context.Request.FirstOrDefaultAsync(r => r.CarId == request.CarId);
             request.User = await _userManager.FindByIdAsync(request.UserId);
@@ -108,8 +108,9 @@ namespace Rent_A_Car.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		// GET: Request/Edit/5
-		public async Task<IActionResult> Edit(int? id)
+        // GET: Request/Edit/5
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null)
 			{
@@ -131,7 +132,8 @@ namespace Rent_A_Car.Controllers
 		// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,CarId,StartDate,EndDate,UserId,IsTaken")] Request request)
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id, [Bind("Id,CarId,StartDate,EndDate,UserId,IsTaken")] Request request)
 		{
 			request.User = await _userManager.FindByIdAsync(request.UserId);
             request.Car = await _context.Car.FirstOrDefaultAsync(x => x.Id == request.CarId);

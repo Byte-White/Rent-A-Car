@@ -12,7 +12,6 @@ using Rent_A_Car.Models;
 namespace Rent_A_Car.Controllers
 {
 
-    [Authorize(Roles = "Admin")]
     public class CarController : Controller
     {
         private readonly AppDbContext _context;
@@ -57,6 +56,7 @@ namespace Rent_A_Car.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([Bind("Id,Brand,Model,YearOfProduction,Seats,PricePerDay,Description")] Car car)
         {
             if (ModelState.IsValid)
@@ -69,6 +69,7 @@ namespace Rent_A_Car.Controllers
         }
 
         // GET: Car/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +90,7 @@ namespace Rent_A_Car.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Brand,Model,YearOfProduction,Seats,Description,PricePerDay")] Car car)
         {
             if (id != car.Id)
@@ -120,6 +122,7 @@ namespace Rent_A_Car.Controllers
         }
 
         // GET: Car/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -140,6 +143,7 @@ namespace Rent_A_Car.Controllers
         // POST: Car/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var car = await _context.Car.FindAsync(id);
